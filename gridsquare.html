@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Gridsquare</title>
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+	<style>
+		.lt_text {
+			color: #888;
+		}
+		.mls_text {
+			color:rebeccapurple;
+			background: whitesmoke;
+		}
+		/* Chrome, Safari, Edge, Opera */
+		.no-spinner::-webkit-outer-spin-button,
+		.no-spinner::-webkit-inner-spin-button {
+			-webkit-appearance: none;
+			margin: 0;
+		}
+
+		/* Firefox */
+		.no-spinner[type="number"] {
+			-moz-appearance: textfield;
+		}
+	</style>
+</head>
+<body>
+	<div class="container">
+		<h1 class="text-primary"> MLS Gridsquare</h1>
+		<p>This form will calculate the MLS Grdisquare using the Maidenhead Locator System. This is used by amateur radio operators to share positions.</p>
+		<form id="gs_latlng">
+			<div class="row mb-3">
+				<div class="col">
+					<label for="gs_lat" class="form-label">latitude</label>
+					<input type="number" step="any" class="form-control no-spinner" name="gs_lat" id="gs_lat" required />
+					<div class="form-text lt_text">In decimal degrees with South being negative.</div>
+				</div>
+				<div class="col">
+					<label for="gs_lng" class="form-label">longitude</label>
+					<input type="number" step="any" class="form-control no-spinner" name="gs_lng" id="gs_lng" required />
+					<div class="form-text lt_text">In decimal degrees with West being negative.</div>
+				</div>
+			</div>
+			<div class="row mb-3">
+				<h2 class="text-primary">Gridsquare</h2>
+				<div class="mls_text p-3 col-4" id="mls">Enter position...</div>
+			</div>
+		</form>
+	</div>    
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+	<script src="gridsquare.js"></script>
+<script>
+    const form   = document.getElementById('gs_latlng');
+    const gs_lat = document.getElementById('gs_lat');
+    const gs_lng = document.getElementById('gs_lng');
+    const gs_mls = document.getElementById('mls');
+
+    // use 'input' for live updates; switch to 'change' if you only want on blur
+    form.addEventListener('input', () => {
+      const lat = parseFloat(gs_lat.value);
+      const lng = parseFloat(gs_lng.value);
+
+      let text;
+
+      if (!Number.isFinite(lat) || !Number.isFinite(lng)) {
+        text = 'Waiting for valid input...';
+      } else if (lat < -90 || lat > 90 || lng < -180 || lng > 180) {
+        text = 'Out of range (lat -90..90, lng -180..180)';
+      } else {
+        try {
+          const grid = latlng2grid({lat, lng});
+          text = grid || 'Could not compute grid.';
+        } catch (err) {
+          text = `Error computing grid. pos: {lat: ${lat}, lng: ${lng}}`;
+          console.error(err);
+        }
+      }
+
+      gs_mls.textContent = text;
+    });
+  </script></body>
+</html>

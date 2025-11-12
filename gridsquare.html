@@ -44,6 +44,11 @@
 				</div>
 			</div>
 			<div class="row mb-3">
+				<div class="col-auto">
+					<button class="btn btn-primary d-inline-block" id="locate" type="button">Use my location</button>
+				</div>
+			</div>
+			<div class="row mb-3">
 				<h2 class="text-primary">Gridsquare</h2>
 				<div class="mls_text p-3 col-4" id="mls">Enter position...</div>
 			</div>
@@ -51,34 +56,59 @@
 	</div>    
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
 	<script src="gridsquare.js"></script>
-<script>
-    const form   = document.getElementById('gs_latlng');
-    const gs_lat = document.getElementById('gs_lat');
-    const gs_lng = document.getElementById('gs_lng');
-    const gs_mls = document.getElementById('mls');
+	<script>
+		const form   = document.getElementById('gs_latlng');
+		const gs_lat = document.getElementById('gs_lat');
+		const gs_lng = document.getElementById('gs_lng');
+		const gs_mls = document.getElementById('mls');
+		const button = document.getElementById('locate');
 
-    // use 'input' for live updates; switch to 'change' if you only want on blur
-    form.addEventListener('input', () => {
-      const lat = parseFloat(gs_lat.value);
-      const lng = parseFloat(gs_lng.value);
+    	// use 'input' for live updates; switch to 'change' if you only want on blur
+		form.addEventListener('input', getMls);
 
-      let text;
+		function getMls(){
+			const lat = parseFloat(gs_lat.value);
+			const lng = parseFloat(gs_lng.value);
 
-      if (!Number.isFinite(lat) || !Number.isFinite(lng)) {
-        text = 'Waiting for valid input...';
-      } else if (lat < -90 || lat > 90 || lng < -180 || lng > 180) {
-        text = 'Out of range (lat -90..90, lng -180..180)';
-      } else {
-        try {
-          const grid = latlng2grid({lat, lng});
-          text = grid || 'Could not compute grid.';
-        } catch (err) {
-          text = `Error computing grid. pos: {lat: ${lat}, lng: ${lng}}`;
-          console.error(err);
-        }
-      }
+			let text;
 
-      gs_mls.textContent = text;
-    });
-  </script></body>
+			if (!Number.isFinite(lat) || !Number.isFinite(lng)) {
+				text = 'Waiting for valid input...';
+			} else if (lat < -90 || lat > 90 || lng < -180 || lng > 180) {
+				text = 'Out of range (lat -90..90, lng -180..180)';
+			} else {
+				try {
+					const grid = latlng2grid({lat, lng});
+					text = grid || 'Could not compute grid.';
+				} catch (err) {
+					text = `Error computing grid. pos: {lat: ${lat}, lng: ${lng}}`;
+					console.error(err);
+				}
+			}
+
+			gs_mls.textContent = text;		
+		}
+
+		// geolocation
+		const locateOptions = {
+			enableHighAccuracy: true,
+			timeout: 10000,
+		};
+
+		form.addEventListener('click', (e) => {
+			navigator.geolocation.getCurrentPosition(locateSuccess, locateFailure, locateOptions);
+		});
+
+		function locateSuccess(pos){
+			gs_lat.value = pos.coords.latitude;
+			gs_lng.value = pos.coords.longitude;
+			getMls();
+		}
+
+		function locateFailure(err){
+			gs_mls.textContent = 'Error retriving location.';
+		}
+
+	</script>
+</body>
 </html>

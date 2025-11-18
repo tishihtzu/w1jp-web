@@ -115,6 +115,14 @@
 			gs_mls.textContent = text;		
 		}
 
+		// helper: Convert LatLng to DOM Geolocation
+		function loc2pos(loc){
+			return {coords:{latitude: loc.lat, longitude: loc.lng}};
+		}
+		function pos2loc(pos){
+			return {lat: pos.coords.latitude, lng:pos.coords.longitude};
+		}
+
 		// geolocation
 		const locateOptions = {
 			enableHighAccuracy: true,
@@ -126,14 +134,16 @@
 		});
 
 		function locateSuccess(pos){
-			const loc = {
-				lat: pos.coords.latitude,
-				lng: pos.coords.longitude,
-			};
+			const loc = pos2loc(pos);
+			updateEverything(loc);
+		}
+
+		function updateEverything(loc){
 			gs_lat.value = loc.lat;
 			gs_lng.value = loc.lng;
 			getMls();
-			updateMap(loc)
+			updateMap(loc);
+			updateMarker(loc);
 		}
 
 		function locateFailure(err){
@@ -143,6 +153,9 @@
 		// map stuff
 		const defZoom = 13;
 		const map = L.map('map').setView([home.lat, home.lng], defZoom);
+		let locMkr = L.marker(home, {draggable: true, autoPan: true});
+		locMkr.addTo(map);
+		// reauired to show
 		L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
 			maxZoom: 19,
 			attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
@@ -150,14 +163,15 @@
 
 		function updateMap(loc){
 			map.setView(loc, defZoom);
+			updateMarker(loc);
+		}
+
+		function updateMarker(loc){
+			locMkr.setLatLng(loc);
 		}
 
 		// initialize
-		// set default location
-		locateSuccess({coords: {latitude:home.lat, longitude: home.lng}});
-
-		
-
+		updateEverything(home);
 	</script>
 </body>
 </html>

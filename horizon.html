@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Visible Horizon</title>
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+	<style>
+		.lt_text {
+			color: #888;
+		}
+		.mls_text {
+			color:rebeccapurple;
+			background: whitesmoke;
+		}
+		/* Chrome, Safari, Edge, Opera */
+		.no-spinner::-webkit-outer-spin-button,
+		.no-spinner::-webkit-inner-spin-button {
+			-webkit-appearance: none;
+			margin: 0;
+		}
+
+		/* Firefox */
+		.no-spinner[type="number"] {
+			-moz-appearance: textfield;
+		}
+	</style>
+</head>
+<body>
+	<div class="container-md">
+		<h1>Visual Horizon</h1>
+		<p>The visible horizon is directly proportional to your height above ground. The Earth follows a curved geodesic path and your eyesight is a straight line. Where these two meet is the visible horizon.</p>
+		<img src="img/horizon.jpeg" class="img-fluid w-100 w-md-auto" style="width: 788px;" alt="Secant Trigonometry">
+		<figcaption class="figure-caption">Secant Trigonometry</figcaption>
+		<h2>Horizon Calulator</h2>
+		<p>Enter antenna heights at both ends. Typical HT heights are 1.5 m (5 ft). </p>
+		<form id="horizon" class="row g-3 row-cols-1 row-cols-md-2">
+			<div class="col" id="col_A">
+				<label></label>
+				<input>
+				<div class="form-text"></div>
+			</div>
+			<div class="col" id="col_B">
+				<label></label>
+				<input>
+				<div class="form-text"></div>
+			</div>
+		</form>
+	</div>
+</body>
+</html>

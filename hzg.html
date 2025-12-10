@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Visible Horizon Calculator</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <style>
+    /* Optional: hide number spinners (WebKit) */
+    input[type="number"]::-webkit-outer-spin-button,
+    input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+    /* Optional: hide number spinners (Firefox) */
+    input[type="number"] { -moz-appearance: textfield; }
+  </style>
+</head>
+<body>
+  <!-- container-md = 100% width until md, then fixed max-width at md breakpoint -->
+  <div class="container-md py-4">
+    <h1 class="h3 mb-4">Visible Horizon</h1>
+
+    <form id="horizonForm" class="row g-3 row-cols-1 row-cols-md-2">
+      <!-- Antenna A -->
+      <div class="col">
+        <label for="hA" class="form-label">Antenna A height</label>
+        <div class="input-group">
+          <input type="number" min="0" step="any" id="hA" class="form-control" placeholder="Enter height" inputmode="decimal" />
+          <span class="input-group-text">m</span>
+        </div>
+        <div class="form-text">Height above local ground or sea level, in meters.</div>
+      </div>
+
+      <!-- Antenna B -->
+      <div class="col">
+        <label for="hB" class="form-label">Antenna B height</label>
+        <div class="input-group">
+          <input type="number" min="0" step="any" id="hB" class="form-control" placeholder="Enter height" inputmode="decimal" />
+          <span class="input-group-text">m</span>
+        </div>
+        <div class="form-text">Height above local ground or sea level, in meters.</div>
+      </div>
+    </form>
+
+    <!-- Results -->
+    <div class="mt-4">
+      <div class="card">
+        <div class="card-body">
+          <h2 class="h5 mb-3">Distances</h2>
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+              Horizon distance from A
+              <span id="dA" class="fw-semibold">—</span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+              Horizon distance from B
+              <span id="dB" class="fw-semibold">—</span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+              Max line-of-sight (A + B)
+              <span id="dTotal" class="fw-bold">—</span>
+            </li>
+          </ul>
+          <p class="text-muted mt-3 mb-0">
+            Uses the standard radio/optical approximation: <code>d ≈ 3.57·√h</code> (km) with <code>h</code> in meters.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // d(km) ≈ 3.57 * sqrt(h_m). LOS ≈ dA + dB.
+    const hA = document.getElementById('hA');
+    const hB = document.getElementById('hB');
+    const dA = document.getElementById('dA');
+    const dB = document.getElementById('dB');
+    const dTotal = document.getElementById('dTotal');
+
+    function kmToKmMi(km) {
+      if (Number.isNaN(km)) return '—';
+      const mi = km * 0.621371;
+      return `${km.toFixed(2)} km (${mi.toFixed(2)} mi)`;
+    }
+
+    function horizonKm(hMeters) {
+      if (isNaN(hMeters) || hMeters < 0) return NaN;
+      return 3.57 * Math.sqrt(hMeters);
+    }
+
+    function update() {
+      const a = parseFloat(hA.value);
+      const b = parseFloat(hB.value);
+
+      const da = horizonKm(a);
+      const db = horizonKm(b);
+      const total = (isNaN(da) ? 0 : da) + (isNaN(db) ? 0 : db);
+
+      dA.textContent = Number.isNaN(da) ? '—' : kmToKmMi(da);
+      dB.textContent = Number.isNaN(db) ? '—' : kmToKmMi(db);
+      // Only show total if at least one value is valid
+      dTotal.textContent = (Number.isNaN(da) && Number.isNaN(db)) ? '—' : kmToKmMi(total);
+    }
+
+    ['input', 'change'].forEach(evt => {
+      hA.addEventListener(evt, update);
+      hB.addEventListener(evt, update);
+    });
+
+    document.addEventListener('DOMContentLoaded', update);
+  </script>
+</body>
+</html>

@@ -143,23 +143,23 @@
 			z.ctx.fillStyle = z.antColor
 			z.ctx.fillText(text,btn.x+btnWidth/2, btn.y+btnWidth/2)
 			z.ctx.restore()
-			}
-	    const updatePings = (timer) => {
-	    	z.pings.forEach((ping, i) => {
+		}
+		const updatePings = (timer) => {
+			z.pings.forEach((ping, i) => {
 				let elapsed = timer-ping.start
 				if (elapsed<0) elapsed = 0
-				if (elapsed > z.ttl) z.pings.splice(i, 1)
-				else {
-					z.ctx.save()
-					z.ctx.strokeStyle = z.sigColor
-					z.ctx.lineWidth = (ping.type == 1)? z.lineWidth : z.lineWidth*3
-					z.ctx.beginPath()
-					z.ctx.arc(z.antPos.x, z.antPos.y, z.ppms*elapsed, 0, 2*Math.PI)
-					z.ctx.stroke()
-					z.ctx.restore()
-				}
-			})
-	    }
+					if (elapsed > z.ttl) z.pings.splice(i, 1)
+						else {
+							z.ctx.save()
+							z.ctx.strokeStyle = z.sigColor
+							z.ctx.lineWidth = (ping.type == 1)? z.lineWidth : z.lineWidth*3
+							z.ctx.beginPath()
+							z.ctx.arc(z.antPos.x, z.antPos.y, z.ppms*elapsed, 0, 2*Math.PI)
+							z.ctx.stroke()
+							z.ctx.restore()
+						}
+					})
+		}
 		const newPing = (type) => {
 			z.pings.push({type, start: performance.now()})
 			// start sound
@@ -187,14 +187,14 @@
 			window.requestAnimationFrame(draw)
 		}
 
-    	function init() {
-    		z.can = document.getElementById('can')
-    		z.beacon = new Beacon(newPing)
-    		resizeCanvas()
+		function init() {
+			z.can = document.getElementById('can')
+			z.beacon = new Beacon(newPing)
+			resizeCanvas()
 			// set up sound
 			// 230306: refactoring to use gain instead of ax.suspend()
-    		const AudioFactory = window.AudioContext || window.webkitAudioContext
-    		if (AudioFactory) {
+			const AudioFactory = window.AudioContext || window.webkitAudioContext
+			if (AudioFactory) {
 				z.ax = new AudioFactory()
 				z.ax.suspend();
 				z.osc = z.ax.createOscillator()
@@ -208,9 +208,9 @@
 				z.can.onclick = eClick
 			}
 			window.addEventListener('resize', resizeCanvas)
-    		z.beacon.play()
+			z.beacon.play()
 			window.requestAnimationFrame(draw)
-    	}
+		}
 	</script>
 </head>
 <body onload="init()">
@@ -219,20 +219,20 @@
 		<div class="row">
 			<h1>Welcome to my site</h1>
 			<p>
-I am a member of Amateur Radio Emergency Services (ARES) for Charlotte County, Florida (CCFLARES.ORG), and I serve on the board of directors for the Amateur Radio Disaster Communications Network (ARDCN). I have extensive experience in emergency communications, having supported large-scale operations across Florida, Boston, and New York City, including the Irma disaster response, the Boston Marathon, the Head of the Charles Regatta, the New York City Marathon, NYFD ARES training, and both regional and national Boy Scout Jamborees.
-</p>
+				I am a member of Amateur Radio Emergency Services (ARES) for Charlotte County, Florida (CCFLARES.ORG), and I serve on the board of directors for the Amateur Radio Disaster Communications Network (ARDCN). I have extensive experience in emergency communications, having supported large-scale operations across Florida, Boston, and New York City, including the Irma disaster response, the Boston Marathon, the Head of the Charles Regatta, the New York City Marathon, NYFD ARES training, and both regional and national Boy Scout Jamborees.
+			</p>
 
-<p>
-Outside of my volunteer work, I am an engineer focused on designing IoT, decision, and process automation solutions. I have worked with organizations including Gatorbot, Rulesware, IBM, Pegasystems, Firepond, Rosemount Aerospace, Bell-Northern Research, and the University of Minnesota Microcomputer Research Center. I have delivered solutions for clients such as Boeing, General Dynamics, General Electric, the Department of Homeland Security, and the City of New York. My experience spans AI, cryptography, communications, rules engines, process automation, programming, and networking.
-</p>
+			<p>
+				Outside of my volunteer work, I am an engineer focused on designing IoT, decision, and process automation solutions. I have worked with organizations including Gatorbot, Rulesware, IBM, Pegasystems, Firepond, Rosemount Aerospace, Bell-Northern Research, and the University of Minnesota Microcomputer Research Center. I have delivered solutions for clients such as Boeing, General Dynamics, General Electric, the Department of Homeland Security, and the City of New York. My experience spans AI, cryptography, communications, rules engines, process automation, programming, and networking.
+			</p>
 
-<p>
-I studied at the University of Minnesota, the Massachusetts Institute of Technology, and Stanford University, earning degrees in electrical engineering along with certificates in artificial intelligence.
-</p>
+			<p>
+				I studied at the University of Minnesota, the Massachusetts Institute of Technology, and Stanford University, earning degrees in electrical engineering along with certificates in artificial intelligence.
+			</p>
 
-<p>
-I live in Englewood, Florida with my wife Dana (KR4GDA). I hold both a General Mobile Radio Service license (WRCG386) and an Amateur Radio Extra Class license (W1JP), as well as an FCC pilot’s license (PMELI).
-</p>
+			<p>
+				I live in Englewood, Florida with my wife Dana (KR4GDA). I hold both a General Mobile Radio Service license (WRCG386) and an Amateur Radio Extra Class license (W1JP), as well as an FCC pilot’s license (PMELI).
+			</p>
 			<p>73,<br>Jon<br>W1JP</p>
 		</div>
 		<div class="row">
@@ -266,29 +266,32 @@ I live in Englewood, Florida with my wife Dana (KR4GDA). I hold both a General M
 				<div class="row col-1">
 					<button  class="btn btn-primary" onclick="sendMessage()">Send</button>
 				</div>
-			<!-- </form> -->
+				<!-- </form> -->
 		</div>
 		<div class="row">
-			<h2 style="margin-top: 2em;">Etcetera</h2>
+			<h1 style="margin-top: 2em;">Etcetera</h1>
 			<p>Interesting stuff...</p>
 			<h3><a href="gridsquare.html">MLS Gridsquares</a></h3>
-			<p>Maidenhead Locator System (MLS) Gridsquare generator using your location or entering your own lattitude and longitude. 
+			<p>Maidenhead Locator System (MLS) Gridsquare generator using your location or entering your own lattitude and longitude. </p>
+			<h3><a href="gridsquare.html">MLS Gridsquares</a></h3>
+			<p>Maidenhead Locator System (MLS) Gridsquare generator using your location or entering your own lattitude and longitude. </p>
 		</div>
-	</div>
+	<div>
 	<script type="text/javascript">
-		function sendMessage(){
-			const wpm = Number(document.getElementById('wpm').value);
-			const farns = Number(document.getElementById('farns').value);
-			if (wpm < 5 || wpm > 40) doAlert();
-			else if (farns < wpm) doAlert();
-			else {
-				z.beacon.setOptions({wpm: wpm, farnsworth: farns});
-				z.beacon.enQueue(document.getElementById('message').value.toUpperCase()+'  ');
-			}
-		}
-		function doAlert(){
-			alert('WPM must be between 5 and 40 inclusively. Farnsworth speed must be greater or equal to WPM.');
-		}
+				function sendMessage(){
+					const wpm = Number(document.getElementById('wpm').value);
+					const farns = Number(document.getElementById('farns').value);
+					if (wpm < 5 || wpm > 40) doAlert();
+					else if (farns < wpm) doAlert();
+					else {
+						z.beacon.setOptions({wpm: wpm, farnsworth: farns});
+						z.beacon.enQueue(document.getElementById('message').value.toUpperCase()+'  ');
+					}
+				}
+				function doAlert(){
+					alert('WPM must be between 5 and 40 inclusively. Farnsworth speed must be greater or equal to WPM.');
+				}
 	</script>
-	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script></body>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+</body>
 </html>

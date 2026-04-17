@@ -10,9 +10,10 @@
 			color: #888;
 		}
 		.mls_text {
-			color:rebeccapurple;
+			color: rebeccapurple;
 			background: whitesmoke;
 		}
+
 		/* Chrome, Safari, Edge, Opera */
 		.no-spinner::-webkit-outer-spin-button,
 		.no-spinner::-webkit-inner-spin-button {
@@ -24,28 +25,272 @@
 		.no-spinner[type="number"] {
 			-moz-appearance: textfield;
 		}
+
+		.calc-output {
+			background: #f8f9fa;
+			font-weight: 600;
+		}
 	</style>
 </head>
 <body>
-	<div class="container-md">
+	<div class="container-md py-4">
 		<h1>Visual Horizon</h1>
-		<p>The visible horizon is directly proportional to your height above ground. The Earth follows a curved geodesic path and your eyesight is a straight line. Where these two meet is the visible horizon.</p>
+		<p>
+			The visible horizon is based on the curved Earth and a straight line of sight.
+			This calculator uses Earth radius at the selected latitude and computes the horizon arc distance
+			for both transmitter and receiver.
+		</p>
+
 		<img src="img/horizon.jpeg" class="img-fluid w-100 w-md-auto" style="width: 788px;" alt="Secant Trigonometry">
-		<figcaption class="figure-caption">Secant Trigonometry</figcaption>
-		<h2>Horizon Calulator</h2>
-		<p>Enter antenna heights at both ends. Typical HT heights are 1.5 m (5 ft). </p>
-		<form id="horizon" class="row g-3 row-cols-1 row-cols-md-2">
-			<div class="col" id="col_A">
-				<label></label>
-				<input>
-				<div class="form-text"></div>
+		<figcaption class="figure-caption mb-4">Secant Trigonometry</figcaption>
+
+		<h2>Horizon Calculator</h2>
+		<p>
+			Enter transmitter and receiver heights above sea level. Typical HT heights are about 1.5 m (5 ft).
+		</p>
+
+		<form id="horizon" class="row g-3">
+			<div class="col-12 col-md-4">
+				<label for="unitSelect" class="form-label">Height Units</label>
+				<select id="unitSelect" class="form-select">
+					<option value="ft" selected>Feet</option>
+					<option value="m">Meters</option>
+				</select>
+				<div class="form-text">Heights are entered in feet or meters.</div>
 			</div>
-			<div class="col" id="col_B">
-				<label></label>
-				<input>
-				<div class="form-text"></div>
+
+			<div class="col-12 col-md-4">
+				<label for="latitude" class="form-label">Latitude</label>
+				<div class="input-group">
+					<input
+						type="number"
+						class="form-control no-spinner"
+						id="latitude"
+						name="latitude"
+						value="27.0"
+						placeholder="27.0"
+						step="any"
+					>
+					<span class="input-group-text">deg</span>
+				</div>
+				<div class="form-text">Used to calculate Earth radius from the WGS84 ellipsoid.</div>
+			</div>
+
+			<div class="col-12 col-md-4">
+				<label for="earthRadius" class="form-label">Earth Radius at Latitude</label>
+				<div class="input-group">
+					<input
+						type="text"
+						class="form-control calc-output"
+						id="earthRadius"
+						name="earthRadius"
+						readonly
+					>
+					<span class="input-group-text" id="radiusUnit">ft</span>
+				</div>
+				<div class="form-text">Displayed in the selected height unit.</div>
+			</div>
+
+			<div class="col-12 col-md-6">
+				<label for="txHeight" class="form-label">Transmitter Height Above Sea Level</label>
+				<div class="input-group">
+					<input
+						type="number"
+						class="form-control no-spinner"
+						id="txHeight"
+						name="txHeight"
+						value="100"
+						placeholder="100"
+						step="any"
+					>
+					<span class="input-group-text unit-label">ft</span>
+				</div>
+				<div class="form-text">Height of the transmitter antenna above sea level.</div>
+			</div>
+
+			<div class="col-12 col-md-6">
+				<label for="rxHeight" class="form-label">Receiver Height Above Sea Level</label>
+				<div class="input-group">
+					<input
+						type="number"
+						class="form-control no-spinner"
+						id="rxHeight"
+						name="rxHeight"
+						value="6"
+						placeholder="6"
+						step="any"
+					>
+					<span class="input-group-text unit-label">ft</span>
+				</div>
+				<div class="form-text">Height of the receiver antenna above sea level.</div>
 			</div>
 		</form>
+
+		<hr class="my-4">
+
+		<h3>Results</h3>
+		<div class="row g-3">
+			<div class="col-12 col-md-4">
+				<label for="txHorizon" class="form-label">Transmitter Horizon</label>
+				<div class="input-group">
+					<input type="text" class="form-control calc-output" id="txHorizon" readonly>
+					<span class="input-group-text" id="distanceUnit1">mi / km</span>
+				</div>
+			</div>
+
+			<div class="col-12 col-md-4">
+				<label for="rxHorizon" class="form-label">Receiver Horizon</label>
+				<div class="input-group">
+					<input type="text" class="form-control calc-output" id="rxHorizon" readonly>
+					<span class="input-group-text" id="distanceUnit2">mi / km</span>
+				</div>
+			</div>
+
+			<div class="col-12 col-md-4">
+				<label for="totalDistance" class="form-label">Total Distance</label>
+				<div class="input-group">
+					<input type="text" class="form-control calc-output" id="totalDistance" readonly>
+					<span class="input-group-text" id="distanceUnit3">mi / km</span>
+				</div>
+			</div>
+		</div>
 	</div>
+
+	<script>
+		/**
+		 * Compute Earth radius at a given latitude (WGS84 ellipsoid)
+		 * @param {number} latDeg - Latitude in degrees
+		 * @param {number} [a=6378137.0] - Equatorial radius (meters)
+		 * @param {number} [b=6356752.314245] - Polar radius (meters)
+		 * @returns {number} Radius in meters
+		 */
+		function earthRadiusAtLatitude(latDeg, a = 6378137.0, b = 6356752.314245) {
+			const phi = latDeg * Math.PI / 180;
+
+			const cos = Math.cos(phi);
+			const sin = Math.sin(phi);
+
+			const numerator =
+				(a * a * cos) ** 2 +
+				(b * b * sin) ** 2;
+
+			const denominator =
+				(a * cos) ** 2 +
+				(b * sin) ** 2;
+
+			return Math.sqrt(numerator / denominator);
+		}
+
+		const FT_PER_M = 3.280839895;
+		const M_PER_KM = 1000;
+		const M_PER_MI = 1609.344;
+
+		const unitSelect = document.getElementById('unitSelect');
+		const latitudeInput = document.getElementById('latitude');
+		const txHeightInput = document.getElementById('txHeight');
+		const rxHeightInput = document.getElementById('rxHeight');
+
+		const earthRadiusOutput = document.getElementById('earthRadius');
+		const txHorizonOutput = document.getElementById('txHorizon');
+		const rxHorizonOutput = document.getElementById('rxHorizon');
+		const totalDistanceOutput = document.getElementById('totalDistance');
+
+		const radiusUnit = document.getElementById('radiusUnit');
+		const distanceUnit1 = document.getElementById('distanceUnit1');
+		const distanceUnit2 = document.getElementById('distanceUnit2');
+		const distanceUnit3 = document.getElementById('distanceUnit3');
+
+		function formatValue(value, decimals = 3) {
+			if (!Number.isFinite(value)) return '';
+			return value.toFixed(decimals);
+		}
+
+		function updateUnitLabels() {
+			const unit = unitSelect.value;
+
+			document.querySelectorAll('.unit-label').forEach(el => {
+				el.textContent = unit;
+			});
+
+			radiusUnit.textContent = unit;
+
+			distanceUnit1.textContent = 'mi / km';
+			distanceUnit2.textContent = 'mi / km';
+			distanceUnit3.textContent = 'mi / km';
+		}
+
+		function clearResults() {
+			earthRadiusOutput.value = '';
+			txHorizonOutput.value = '';
+			rxHorizonOutput.value = '';
+			totalDistanceOutput.value = '';
+		}
+
+		function calculateHorizonArc(radius, height) {
+			// horizon distance along Earth's surface:
+			// horizon = R * acos(R / (R + h))
+			return radius * Math.acos(radius / (radius + height));
+		}
+
+		function calculate() {
+			const unit = unitSelect.value;
+			const lat = parseFloat(latitudeInput.value);
+			const txHeightRaw = parseFloat(txHeightInput.value);
+			const rxHeightRaw = parseFloat(rxHeightInput.value);
+
+			if (!Number.isFinite(lat) || lat < -90 || lat > 90) {
+				clearResults();
+				return;
+			}
+
+			const radiusAtLatitude = unit === 'ft'
+				? earthRadiusAtLatitude(lat) * FT_PER_M
+				: earthRadiusAtLatitude(lat);
+
+			earthRadiusOutput.value = formatValue(radiusAtLatitude, 2);
+
+			if (
+				!Number.isFinite(txHeightRaw) || txHeightRaw < 0 ||
+				!Number.isFinite(rxHeightRaw) || rxHeightRaw < 0
+			) {
+				txHorizonOutput.value = '';
+				rxHorizonOutput.value = '';
+				totalDistanceOutput.value = '';
+				return;
+			}
+
+			const radiusMeters = earthRadiusAtLatitude(lat);
+			const txHeightMeters = unit === 'ft' ? txHeightRaw / FT_PER_M : txHeightRaw;
+			const rxHeightMeters = unit === 'ft' ? rxHeightRaw / FT_PER_M : rxHeightRaw;
+
+			const transmitterHorizonMeters = calculateHorizonArc(radiusMeters, txHeightMeters);
+			const receiverHorizonMeters = calculateHorizonArc(radiusMeters, rxHeightMeters);
+			const totalDistanceMeters = transmitterHorizonMeters + receiverHorizonMeters;
+
+			function formatDistancePair(distanceMeters) {
+				const miles = distanceMeters / M_PER_MI;
+				const kilometers = distanceMeters / M_PER_KM;
+				return `${formatValue(miles, 3)} / ${formatValue(kilometers, 3)}`;
+			}
+
+			txHorizonOutput.value = formatDistancePair(transmitterHorizonMeters);
+			rxHorizonOutput.value = formatDistancePair(receiverHorizonMeters);
+			totalDistanceOutput.value = formatDistancePair(totalDistanceMeters);
+		}
+
+		[unitSelect, latitudeInput, txHeightInput, rxHeightInput].forEach(el => {
+			el.addEventListener('input', () => {
+				updateUnitLabels();
+				calculate();
+			});
+			el.addEventListener('change', () => {
+				updateUnitLabels();
+				calculate();
+			});
+		});
+
+		updateUnitLabels();
+		calculate();
+	</script>
 </body>
 </html>

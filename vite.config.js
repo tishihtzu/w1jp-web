@@ -1,9 +1,14 @@
-// vite.config.js
 import { defineConfig } from 'vite'
+import { resolve } from 'path'
 
 export default defineConfig({
-  root: '.',          // where index.html lives
-  server: {
-    port: 5173
+  build: {
+    rollupOptions: {
+      input: {
+        main: resolve(__dirname, 'index.html'),
+        gridsquare: resolve(__dirname, 'gridsquare.html'),
+        horizon: resolve(__dirname, 'horizon.html'),
+      }
+    }
   }
 })

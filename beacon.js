@@ -148,7 +148,7 @@ export class Beacon {
 			// 230321 refactor for enQued messages
 			case 3 :
 				// space
-				delay = 7 * this.wordPeriod - this.tickPeriod;
+				delay = 7 * this.spacePeriod - this.tickPeriod;
 				++this.iSym;
 				break;
 			default :

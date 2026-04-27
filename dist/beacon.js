@@ -53,7 +53,7 @@ const symbolTable = [
 	['=',[2,1,1,1,2,0]]
 ];
 
-class Beacon {
+export class Beacon {
 	wpm = 12;
 	farnsworth = 20;
 	endDelay = 2000;

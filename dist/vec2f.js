@@ -3,7 +3,7 @@
 // 171102 updating old prototype to es6 class
 // ©2011 W1JP, ©2017 Gatorbot LLC
 
-class Vec2f {
+export class Vec2f {
 	constructor (x=0, y=0) {
 		this.x = x
 		this.y = y

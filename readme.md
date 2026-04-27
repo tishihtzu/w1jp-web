@@ -5,4 +5,6 @@ I have resently refactored the beacon code to support modern WebAudio changes.
 
 __260105__ I have added mapping to the gridsqure serivce.
 
+__260427__ Migrated to vite and using as static app.
+
 __--jon__

@@ -39,9 +39,10 @@
 			height: auto;
 		}
 	</style>
-	<script src="vec2f.js"></script>
-	<script src="beacon.js"></script>
-	<script>
+	<script type="module">
+		import { Vec2f } from './public/vec2f.js'
+		import { Beacon } from './public/beacon.js'
+
 		const z = {
 			version: 1.4,
 			tick: 0,
@@ -194,6 +195,40 @@
 			else z.ax.suspend;
 		}
 
+		function sendMessage(){
+			const wpm = Number(document.getElementById('wpm').value);
+			const farns = Number(document.getElementById('farns').value);
+			const btn = document.getElementById('btnSend');
+			const statusMessage = document.getElementById('sendStatus');
+			// disable button
+			btn.disabled = true;
+			btn.innerText = 'Seinding...';
+			// send it
+			if (wpm < 5 || wpm > 40) doAlert();
+			else if (farns < wpm) doAlert();
+			else {
+				z.beacon.setOptions({wpm: wpm, farnsworth: farns});
+				z.beacon.enQueue(document.getElementById('message').value.toUpperCase()+'  ');
+			}
+			// success
+			statusMessage.className = 'alert alert-success mt-2';
+			statusMessage.innerText = 'Successfully enqueued.';
+			// finally
+			btn.disabled = false;
+			btn.innerText = 'Send';
+			setTimeout(() => {
+				statusMessage.classList.add('d-none');
+			}, 5000);
+		}
+
+		function clearStatus() {
+			
+		}
+
+		function doAlert(){
+			alert('WPM must be between 5 and 40 inclusively. Farnsworth speed must be greater or equal to WPM.');
+		}
+
 		const draw = (timer) => {
 			z.ctx.clearRect(0,0, z.can.width, z.can.height)
 			drawText()
@@ -229,9 +264,12 @@
 			z.beacon.play()
 			window.requestAnimationFrame(draw)
 		}
+
+		window.sendMessage = sendMessage
+		window.addEventListener('DOMContentLoaded', init)
 	</script>
 </head>
-<body onload="init()">
+<body>
 	<canvas id="can" class="j-dark"></canvas>
 	<div class="container">
 		<div class="row welcome-section">
@@ -286,11 +324,15 @@
 					<textarea id="message" class="form-control" rows="5"></textarea>
 				</div>
 				<div class="row"><br></div>
-				<div class="row col-1">
-					<button  class="btn btn-primary" onclick="sendMessage()">Send</button>
-				</div>
-				<!-- </form> -->
+		<div class="row mt-3 align-items-center">
+			<div class="col-auto">
+				<button id="btnSend" class="btn btn-primary" onclick="sendMessage()">Send</button>
+			</div>
+			<div class="col">
+				<div id="sendStatus" class="alert d-none mb-0" role="alert"></div>
+			</div>
 		</div>
+		<!-- </form> -->
 		<div class="row">
 			<h1 style="margin-top: 2em;">Etcetera</h1>
 			<p>Interesting stuff...</p>
@@ -300,21 +342,6 @@
 			<p>Maidenhead Locator System (MLS) Gridsquare generator using your location or entering your own lattitude and longitude. </p>
 		</div>
 	<div>
-	<script type="text/javascript">
-				function sendMessage(){
-					const wpm = Number(document.getElementById('wpm').value);
-					const farns = Number(document.getElementById('farns').value);
-					if (wpm < 5 || wpm > 40) doAlert();
-					else if (farns < wpm) doAlert();
-					else {
-						z.beacon.setOptions({wpm: wpm, farnsworth: farns});
-						z.beacon.enQueue(document.getElementById('message').value.toUpperCase()+'  ');
-					}
-				}
-				function doAlert(){
-					alert('WPM must be between 5 and 40 inclusively. Farnsworth speed must be greater or equal to WPM.');
-				}
-	</script>
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
 </body>
 </html>

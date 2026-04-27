@@ -20,6 +20,15 @@
 			height: 200px;
 			width: 100%;
 		}
+		.welcome-section {
+			align-items: center;
+			gap: 1.5rem 0;
+		}
+		.welcome-photo {
+			display: block;
+			width: 100%;
+			height: auto;
+		}
 	</style>
 	<script src="vec2f.js"></script>
 	<script src="beacon.js"></script>
@@ -216,24 +225,29 @@
 <body onload="init()">
 	<canvas id="can" class="j-dark"></canvas>
 	<div class="container">
-		<div class="row">
-			<h1>Welcome to my site</h1>
-			<p>
-				I am a member of Amateur Radio Emergency Services (ARES) for Charlotte County, Florida (CCFLARES.ORG), and I serve on the board of directors for the Amateur Radio Disaster Communications Network (ARDCN). I have extensive experience in emergency communications, having supported large-scale operations across Florida, Boston, and New York City, including the Irma disaster response, the Boston Marathon, the Head of the Charles Regatta, the New York City Marathon, NYFD ARES training, and both regional and national Boy Scout Jamborees.
-			</p>
+		<div class="row welcome-section">
+			<div class="col-12 col-lg-6">
+				<h1>Welcome to my site</h1>
+				<p>
+					I am a member of Amateur Radio Emergency Services (ARES) for Charlotte County, Florida (CCFLARES.ORG), and I serve on the board of directors for the Amateur Radio Disaster Communications Network (ARDCN). I have extensive experience in emergency communications, having supported large-scale operations across Florida, Boston, and New York City, including the Irma disaster response, the Boston Marathon, the Head of the Charles Regatta, the New York City Marathon, NYFD ARES training, and both regional and national Boy Scout Jamborees.
+				</p>
 
-			<p>
-				Outside of my volunteer work, I am an engineer focused on designing IoT, decision, and process automation solutions. I have worked with organizations including <a href="https://www.gatorbot.com">Gatorbot</a>, Rulesware, IBM, Pegasystems, Firepond, Rosemount Aerospace, Bell-Northern Research, and the University of Minnesota Microcomputer Research Center. I have delivered solutions for clients such as Boeing, General Dynamics, General Electric, the Department of Homeland Security, and the City of New York. My experience spans AI, cryptography, communications, rules engines, process automation, programming, and networking.
-			</p>
+				<p>
+					Outside of my volunteer work, I am an engineer focused on designing IoT, decision, and process automation solutions. I have worked with organizations including <a href="https://www.gatorbot.com">Gatorbot</a>, Rulesware, IBM, Pegasystems, Firepond, Rosemount Aerospace, Bell-Northern Research, and the University of Minnesota Microcomputer Research Center. I have delivered solutions for clients such as Boeing, General Dynamics, General Electric, the Department of Homeland Security, and the City of New York. My experience spans AI, cryptography, communications, rules engines, process automation, programming, and networking.
+				</p>
 
-			<p>
-				I studied at the University of Minnesota, the Massachusetts Institute of Technology, and Stanford University, earning degrees in electrical engineering along with certificates in artificial intelligence.
-			</p>
+				<p>
+					I studied at the University of Minnesota, the Massachusetts Institute of Technology, and Stanford University, earning degrees in electrical engineering along with certificates in artificial intelligence.
+				</p>
 
-			<p>
-				I live in Englewood, Florida with my wife Dana (KR4GDA). I hold both a General Mobile Radio Service license (WRCG386) and an Amateur Radio Extra Class license (W1JP), as well as an FCC pilot’s license (PMELI).
-			</p>
-			<p>73,<br>Jon<br>W1JP</p>
+				<p>
+					I live in Englewood, Florida with my wife Dana (KR4GDA). I hold both a General Mobile Radio Service license (WRCG386) and an Amateur Radio Extra Class license (W1JP), as well as an FCC pilot’s license (PMELI).
+				</p>
+				<p>73,<br>Jon<br>W1JP</p>
+			</div>
+			<div class="col-12 col-lg-6">
+				<img src="img/jrp_large.webp" alt="Jon Pellant" class="welcome-photo">
+			</div>
 		</div>
 		<div class="row">
 			<h1>Code Practice</h1>

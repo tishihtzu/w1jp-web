@@ -77,8 +77,14 @@
 				</div>
 			</div>
 			<div class="row mb-3">
-				<h2 class="text-primary">Gridsquare</h2>
-				<div class="mls_text p-3 col-4" id="mls">Enter position...</div>
+				<div class="col-md-6 mb-3 mb-md-0">
+					<h2 class="text-primary">Maidenhead Gridsquare</h2>
+					<div class="mls_text p-3" id="mls">Enter position...</div>
+				</div>
+				<div class="col-md-6">
+					<h2 class="text-primary">MGRS Grid</h2>
+					<div class="mls_text p-3"><span id="mgrs-grid">Enter position...</span></div>
+				</div>
 			</div>
 			<div class="row mb-3" id="map"></div>
 			<h1 class="text-danger-emphasis">Find your Gridsquare</h1>
@@ -87,6 +93,9 @@
 				<li>Zoom in/out to get to more places</li>
 				<li>Click anywhere on the map to set the marker there</li>
 			</ul>
+			<p> Note that the MGRS (Military Grid Reference System), which is what our military uses, is more characters than MLS. This is why we use it in amateur radio. I know — the MGRS Grid is easer to determine from a map which is why the military uses it.</p>
+			<p>Clearly, my math has way too much precision for the accuracy. That many decimal places (coming from the browser location) implies µm accuracy! Most phone GPSs are only accurate to about 3 m. The 8-character MLS string describes a box 245 m x 463 m. If we added two more digits we would be a 19 m x 14 m box.</p>
+			<p> Enjoy, <br/> Jon </p>
 		</form>
 	</div>    
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>

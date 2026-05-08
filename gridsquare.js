@@ -1,6 +1,8 @@
 // ©2025 Gatorbot LLC
 // All rights reserved
 
+import { toMGRS10m } from "./toMGRS.js";
+
 export function latlng2grid(llPos) {
 	if (!Number.isFinite(llPos.lat) || !Number.isFinite(llPos.lng)) {
 		throw new Error(`Invalid llPos object of form {lat: ${llPos.lat}, lng: ${llPos.lng}}. Must be numbers.`);
@@ -54,6 +56,7 @@ function initGridsquare() {
 	const gsLat = document.getElementById('gs_lat');
 	const gsLng = document.getElementById('gs_lng');
 	const gsMls = document.getElementById('mls');
+	const gsMgrs = document.getElementById('mgrs-grid');
 	const button = document.getElementById('locate');
 	const home = { lat: 26.972727201250866, lng: -82.37389332860616 };
 	const defaultZoom = 13;
@@ -72,22 +75,36 @@ function initGridsquare() {
 		const lat = parseFloat(gsLat.value);
 		const lng = parseFloat(gsLng.value);
 		let text;
+		let mgrsText;
 
 		if (!Number.isFinite(lat) || !Number.isFinite(lng)) {
 			text = 'Waiting for valid input...';
+			mgrsText = text;
 		} else if (lat < -90 || lat > 90 || lng < -180 || lng > 180) {
 			text = 'Out of range (lat -90..90, lng -180..180)';
+			mgrsText = text;
 		} else {
+			const pos = { lat, lng };
+
 			try {
-				const grid = latlng2grid({ lat, lng });
+				const grid = latlng2grid(pos);
 				text = grid || 'Could not compute grid.';
 			} catch (err) {
 				text = `Error computing grid. pos: {lat: ${lat}, lng: ${lng}}`;
 				console.error(err);
 			}
+
+			try {
+				const mgrsGrid = toMGRS10m(pos);
+				mgrsText = mgrsGrid || 'Could not compute MGRS grid.';
+			} catch (err) {
+				mgrsText = `Error computing MGRS grid. pos: {lat: ${lat}, lng: ${lng}}`;
+				console.error(err);
+			}
 		}
 
 		gsMls.textContent = text;
+		gsMgrs.textContent = mgrsText;
 	}
 
 	function updateMarker(loc) {
@@ -112,6 +129,7 @@ function initGridsquare() {
 
 	function locateFailure() {
 		gsMls.textContent = 'Error retrieving location.';
+		gsMgrs.textContent = 'Error retrieving location.';
 	}
 
 	form.addEventListener('input', getMls);
